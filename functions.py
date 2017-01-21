@@ -7,4 +7,5 @@ def centerText(font, text, screenWidth):
 	
 def getText(line, filename="text.txt"):
 	ret = linecache.getline(filename, line)
+	ret = ret[:-1]
 	return ret
