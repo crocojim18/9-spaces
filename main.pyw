@@ -19,7 +19,7 @@ butto2 = pygame.Rect(centerText(thisFont, str3, WIDTH)-5,215,button2Width[0]+10,
 title = thisFont.render(str1, 1, (30,30,30))
 exitaisvou = thisFont.render(str2, 1, (30,30,30))
 desc = thisFont.render(str3, 1, (30,30,30))
-screen.interpretMap('first.map')
+screen.interpretMap('maps/first.map')
 isBlue = True
 
 while 1:
@@ -28,8 +28,8 @@ while 1:
 			sys.exit()
 		elif event.type == pygame.MOUSEBUTTONDOWN:
 			if butto2.collidepoint(pygame.mouse.get_pos()):
-				if isBlue: screen.interpretMap('second.map')
-				else: screen.interpretMap('first.map')
+				if isBlue: screen.interpretMap('maps/second.map')
+				else: screen.interpretMap('maps/first.map')
 				isBlue = not isBlue
 			elif butto.collidepoint(pygame.mouse.get_pos()):
 				sys.exit()
