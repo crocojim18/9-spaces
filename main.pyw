@@ -3,34 +3,43 @@ from functions import *
 
 pygame.init()
 
+
 WIDTH = 650
 HEIGHT = 450
 
-screen = pygame.display.set_mode((WIDTH,HEIGHT))
+screen = Screen(WIDTH, HEIGHT)
 thisFont = pygame.font.SysFont("TimesNewRoman", 30)
 str1 = getText(2)
 str2 = getText(4)
-str3 = "A game I'm slowly working on"
-buttonWidth = thisFont.size("Exit")
-butto = pygame.Rect(295,centerText(thisFont, str2, WIDTH)-5,buttonWidth[0]+10,buttonWidth[1]+10)
+str3 = getText(3)
+buttonWidth = thisFont.size(str2)
+button2Width = thisFont.size(str3)
+butto = pygame.Rect(centerText(thisFont, str2, WIDTH)-5,295,buttonWidth[0]+10,buttonWidth[1]+10)
+butto2 = pygame.Rect(centerText(thisFont, str3, WIDTH)-5,215,button2Width[0]+10,button2Width[1]+10)
 title = thisFont.render(str1, 1, (30,30,30))
 exitaisvou = thisFont.render(str2, 1, (30,30,30))
 desc = thisFont.render(str3, 1, (30,30,30))
-
+screen.interpretMap('first.map')
+isBlue = True
 
 while 1:
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			sys.exit()
 		elif event.type == pygame.MOUSEBUTTONDOWN:
-			if butto.collidepoint(pygame.mouse.get_pos()):
+			if butto2.collidepoint(pygame.mouse.get_pos()):
+				if isBlue: screen.interpretMap('second.map')
+				else: screen.interpretMap('first.map')
+				isBlue = not isBlue
+			elif butto.collidepoint(pygame.mouse.get_pos()):
 				sys.exit()
-		
-	screen.fill((110,198,211))
-	pygame.draw.rect(screen, (109, 139, 188), butto)
-	screen.blit(title, (centerText(thisFont, str1, WIDTH),100))
-	screen.blit(desc, (centerText(thisFont, str3, WIDTH),150))
-	screen.blit(exitaisvou, (centerText(thisFont, str2, WIDTH),300))
+
+	screen.fill()
+	screen.drawRect(butto, 109, 139, 188)
+	screen.drawRect(butto2, 109, 139, 188)
+	screen.placeText(title, centerText(thisFont, str1, WIDTH),100)
+	screen.placeText(desc, centerText(thisFont, str3, WIDTH),220)
+	screen.placeText(exitaisvou, centerText(thisFont, str2, WIDTH),300)
     
 	pygame.display.flip()
 
