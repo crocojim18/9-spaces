@@ -24,7 +24,7 @@ class Screen:
 
 	def place(self, thing):
 		self.screen.blit(thing.sprite, (thing.x, thing.y))
-		thing.update_rect()
+		thing.updateRect()
 
 	def placeText(self, text_object, x, y):
 		self.screen.blit(text_object, (x, y))
@@ -43,3 +43,48 @@ class Screen:
 		hey = struct.unpack('3B', f.read(3))
 		f.close()
 		self.fillColor = hey
+		
+class Character:
+
+	def __init__(self, thix, thiy):
+		self.x = thix
+		self.y = thiy
+		self.forwardSprite = pygame.image.load("pics/ned.png")
+		self.backSprite = pygame.image.load("pics/ned back.png")
+		self.backWSprite = pygame.image.load("pics/ned back.png")#ned_walk_backward.gif")
+		self.forwardWSprite = pygame.image.load("pics/ned.png")#_walk_forward.png")
+		self.rightWSprite = pygame.image.load("pics/ned1.png")
+		self.leftWSprite = pygame.transform.flip(self.rightWSprite, True, False)
+		self.sprite = self.forwardSprite
+		self.facing = 0
+		self.walking = 0
+	
+	def updateRect(self):
+		self.x = self.x
+		
+	def exist(self):
+		upd = pygame.key.get_pressed()
+		if upd[pygame.K_w]:
+			self.y -= 4
+			self.facing = 1
+			self.walking |= 2
+		if upd[pygame.K_a]:
+			self.x -= 4
+			self.walking |= 8;
+		if upd[pygame.K_s]:
+			self.y += 4
+			self.facing = 0
+			self.walking |= 1
+		if upd[pygame.K_d]:
+			self.x += 4
+			self.walking |= 4
+		self.updateSprite()
+		self.walking = 0
+		
+	def updateSprite(self):
+		if(self.walking == 0 and self.facing == 0): self.sprite = self.forwardSprite
+		elif(self.walking == 0 and self.facing == 1): self.sprite = self.backSprite
+		elif(self.walking > 7): self.sprite = self.leftWSprite
+		elif(self.walking >= 4 and self.walking <= 7): self.sprite = self.rightWSprite
+		elif(self.walking == 2 or self.walking == 3): self.sprite = self.backWSprite
+		else: self.sprite = self.forwardWSprite
