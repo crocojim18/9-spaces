@@ -17,7 +17,7 @@ class Screen:
 		self.height = y
 		icon = pygame.image.load("pics/icon.png")
 		pygame.display.set_icon(icon)
-		pygame.display.set_caption("9 Spaces")
+		pygame.display.set_caption(getText(2))
 		size = self.width, self.height
 		self.screen = pygame.display.set_mode(size)
 		self.fillColor = (0,0,0)
@@ -51,13 +51,19 @@ class Character:
 		self.y = thiy
 		self.forwardSprite = pygame.image.load("pics/ned.png")
 		self.backSprite = pygame.image.load("pics/ned back.png")
-		self.backWSprite = pygame.image.load("pics/ned back.png")#ned_walk_backward.gif")
-		self.forwardWSprite = pygame.image.load("pics/ned.png")#_walk_forward.png")
-		self.rightWSprite = pygame.image.load("pics/ned1.png")
-		self.leftWSprite = pygame.transform.flip(self.rightWSprite, True, False)
+		self.backWSprite = [pygame.image.load("pics/nedWB1.png"), pygame.image.load("pics/nedWB2.png")]
+		self.forwardWSprite = [pygame.image.load("pics/nedWF1.png"), pygame.image.load("pics/nedWF2.png")]
+		self.rightWSprite = [pygame.image.load("pics/ned1.png"),pygame.image.load("pics/ned2.png"),pygame.image.load("pics/ned3.png")]
+		self.leftWSprite = [pygame.transform.flip(self.rightWSprite[0], True, False),
+							pygame.transform.flip(self.rightWSprite[1], True, False),
+							pygame.transform.flip(self.rightWSprite[2], True, False)]
 		self.sprite = self.forwardSprite
 		self.facing = 0
 		self.walking = 0
+		self.speed = 4
+		self.frame = 0
+		self.toFrom = True
+		self.frameTime = pygame.time.get_ticks();
 	
 	def updateRect(self):
 		self.x = self.x
@@ -65,26 +71,56 @@ class Character:
 	def exist(self):
 		upd = pygame.key.get_pressed()
 		if upd[pygame.K_w]:
-			self.y -= 4
+			self.y -= self.speed
 			self.facing = 1
 			self.walking |= 2
 		if upd[pygame.K_a]:
-			self.x -= 4
+			self.x -= self.speed
 			self.walking |= 8;
 		if upd[pygame.K_s]:
-			self.y += 4
+			self.y += self.speed
 			self.facing = 0
 			self.walking |= 1
 		if upd[pygame.K_d]:
-			self.x += 4
+			self.x += self.speed
 			self.walking |= 4
 		self.updateSprite()
 		self.walking = 0
 		
+	def twoWayFrame(self):
+		if(pygame.time.get_ticks()-self.frameTime>250):
+			if(self.frame==0): self.frame = 1
+			else: self.frame = 0
+			self.frameTime = pygame.time.get_ticks()
+
+	def threeWayFrame(self):
+		if(pygame.time.get_ticks()-self.frameTime>250):
+			if(self.frame==0): self.frame = 1
+			elif(self.frame==1 and self.toFrom): self.frame = 2
+			elif(self.frame==1 and not self.toFrom):
+				self.frame = 0
+				self.toFrom = True
+			else:
+				self.frame = 1
+				self.toFrom = False
+			self.frameTime = pygame.time.get_ticks()
+
 	def updateSprite(self):
-		if(self.walking == 0 and self.facing == 0): self.sprite = self.forwardSprite
-		elif(self.walking == 0 and self.facing == 1): self.sprite = self.backSprite
-		elif(self.walking > 7): self.sprite = self.leftWSprite
-		elif(self.walking >= 4 and self.walking <= 7): self.sprite = self.rightWSprite
-		elif(self.walking == 2 or self.walking == 3): self.sprite = self.backWSprite
-		else: self.sprite = self.forwardWSprite
+		if(self.walking == 0 and self.facing == 0):
+			self.sprite = self.forwardSprite
+		elif(self.walking == 0 and self.facing == 1):
+			self.sprite = self.backSprite
+		elif(self.walking > 7):
+			self.threeWayFrame()
+			self.sprite = self.leftWSprite[self.frame]
+		elif(self.walking >= 4 and self.walking <= 7):
+			self.threeWayFrame()
+			self.sprite = self.rightWSprite[self.frame]
+		elif(self.walking == 2 or self.walking == 3):
+			self.twoWayFrame()
+			if(self.frame>1): self.frame = 0
+			self.sprite = self.backWSprite[self.frame]
+		else:
+			self.twoWayFrame()
+			if(self.frame>1): self.frame = 0
+			self.sprite = self.forwardWSprite[self.frame]

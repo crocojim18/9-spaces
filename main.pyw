@@ -39,12 +39,11 @@ while 1:
 	screen.fill()
 	screen.drawRect(butto, 109, 139, 188)
 	screen.drawRect(butto2, 109, 139, 188)
+	screen.placeText(desc, centerText(thisFont, str3, WIDTH),220)
+	screen.placeText(exitaisvou, centerText(thisFont, str2, WIDTH),300)
 	ned.exist()
 	screen.place(ned)
 	screen.placeText(title, centerText(thisFont, str1, WIDTH),100)
-	screen.placeText(desc, centerText(thisFont, str3, WIDTH),220)
-	screen.placeText(exitaisvou, centerText(thisFont, str2, WIDTH),300)
-    
 	gameClock.tick(40)
 	pygame.display.flip()
 
