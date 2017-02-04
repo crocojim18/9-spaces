@@ -1,0 +1,14 @@
+make map with list of available blocks
+in the bin file:
+	up until \n are available blocks
+	after that, all lines are lines of map
+in interpreting:
+	read up until \n
+	make array of that length
+	make temp array that has a map from numbers(1.png, etc.) to tile indexes
+	load those tiles into array loadedTiles
+	for each map tile,
+		append to tileList a list consisting of
+			the tile index of the needed sprite
+			the (x,y) coordinates
+	

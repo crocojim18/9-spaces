@@ -21,11 +21,13 @@ class Screen:
 		size = self.width, self.height
 		self.screen = pygame.display.set_mode(size)
 		self.fillColor = (0,0,0)
+		self.loadedTiles = []
+		self.tileList = []
 
 	def place(self, thing):
 		self.screen.blit(thing.sprite, (thing.x, thing.y))
 		thing.updateRect()
-
+		
 	def placeText(self, text_object, x, y):
 		self.screen.blit(text_object, (x, y))
 
@@ -38,12 +40,28 @@ class Screen:
 	def drawRect(self, rect, r, g, b):
 		pygame.draw.rect(self.screen, (r, g, b), rect)
 
-	def interpretMap(self, file):
+	def interpretColor(self, file):
 		f = open(file, 'rb')
 		hey = struct.unpack('3B', f.read(3))
 		f.close()
 		self.fillColor = hey
 		
+	def drawMap(self):
+		for i in len(tileList):
+			self.screen.blit(loadedTiles[tileList[i][0]], tileList[i][1])
+			#such that loadedTiles consists of cells that have a sprite index, and (x,y)
+
+	def interpretMap(self,file=1):
+		inp = open('maps/'+str(file)+'.map', 'rb')
+		tempStr = "l"
+		while len(tempStr) > 0:
+			tempStr = inp.read(1)
+			if tempStr != "":
+				stri = str(struct.unpack('B', tempStr)[0])
+				print "pics/"+stri+".png"
+				#pygame.image.load("pics/"+stri+".png")
+		inp.close()
+
 class Character:
 
 	def __init__(self, thix, thiy):

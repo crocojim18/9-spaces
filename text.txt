@@ -1,4 +1,4 @@
 Error
 9 Spaces
-Switch colors
+Start Game
 Exit
